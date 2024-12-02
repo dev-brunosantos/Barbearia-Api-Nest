@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "cargos" ALTER COLUMN "dt_criacao" SET DEFAULT CURRENT_TIMESTAMP;
