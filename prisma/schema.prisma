@@ -12,3 +12,11 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Cargos {
+  id Int @id @default(autoincrement())
+  cargo String
+  dt_criacao DateTime @default(now())
+  dt_atualizacao DateTime @updatedAt()
+  @@map("cargos")
+}
