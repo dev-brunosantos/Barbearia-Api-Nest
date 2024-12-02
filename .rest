@@ -1,0 +1,12 @@
+### GET
+GET http://localhost:3000/cargos
+
+### POST 
+POST http://localhost:3000/cargos
+Content-Type: application/json
+
+{
+    "cargo": "Teste",
+    "dt_criacao": "02/12/2024",
+    "dt_atualizacao": "02/12/2024"
+}
