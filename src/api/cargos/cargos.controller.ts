@@ -13,22 +13,27 @@ export class CargosController {
   }
 
   @Get()
-  findAll() {
-    return this.cargosService.findAll();
+  Listar() {
+    return this.cargosService.ListarCargos();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.cargosService.findOne(+id);
+  CargoId(@Param('id') id: number) {
+    return this.cargosService.BuscarCargoID(+id);
+  }
+
+  // @Get(':cargo')
+  // CargoNome(@Param('cargo') cargo: string) {
+  //   return this.cargosService.BuscarCargoNome(cargo);
+  // }
+
+  @Patch(':id')
+  Atualizar(@Param('id') id: string, @Body() updateCargoDto: UpdateCargoDto) {
+    return this.cargosService.AtualizarCargo(+id, updateCargoDto);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCargoDto: UpdateCargoDto) {
-    return this.cargosService.update(+id, updateCargoDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.cargosService.remove(+id);
+  Apagar(@Param('id') id: string) {
+    return this.cargosService.ApagarCargo(+id);
   }
 }
