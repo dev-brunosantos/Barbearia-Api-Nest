@@ -3,4 +3,5 @@ export class CreateUsuarioDto {
     sobrenome?: string;
     email: string;
     senha: string;
+    tipoCargo: string;
 }
