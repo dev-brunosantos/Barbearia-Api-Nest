@@ -9,17 +9,17 @@ export class UsuariosController {
 
   @Post()
   create(@Body() createUsuarioDto: CreateUsuarioDto) {
-    return this.usuariosService.create(createUsuarioDto);
+    return this.usuariosService.CadastrarUsuario(createUsuarioDto);
   }
 
   @Get()
   findAll() {
-    return this.usuariosService.findAll();
+    return this.usuariosService.ListarUsuarios();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usuariosService.findOne(+id);
+  @Get(':nome')
+  findOne(@Param('nome') nome: string) {
+    return this.usuariosService.UsuarioNome(nome);
   }
 
   @Patch(':id')
