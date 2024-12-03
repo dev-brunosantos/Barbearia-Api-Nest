@@ -3,11 +3,15 @@ POST http://localhost:3000/usuarios
 Content-Type: application/json
 
 {
-    "nome": "Bruno",
-    "sobrenome": "Santos",
-    "email": "brunosdesenvolvedor@gmail.com",
-    "senha": "Brunosds1@"
+    "nome": "Sara",
+    "sobrenome": "",
+    "email": "sarasantos@gmail.com",
+    "senha": "SaraSara",
+    "tipoCargo": "Desenvolvedor"
 }
 
 ### GET
-GET POST http://localhost:3000/usuarios
+GET http://localhost:3000/usuarios
+
+### GET
+GET http://localhost:3000/usuarios/monica
