@@ -3,7 +3,7 @@ POST http://localhost:3000/cargos
 Content-Type: application/json
 
 {
-    "cargo": "Teste 1"
+    "cargo": "Profissional"
 }
 
 ### GET

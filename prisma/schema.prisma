@@ -14,20 +14,28 @@ datasource db {
 }
 
 model Cargos {
-  id Int @id @default(autoincrement())
-  cargo String
-  dt_criacao DateTime @default(now())
+  id             Int      @id @default(autoincrement())
+  cargo          String
+  dt_criacao     DateTime @default(now())
   dt_atualizacao DateTime @updatedAt()
+
+  usuarios Usuarios[]
+
   @@map("cargos")
 }
 
 model Usuarios {
-  id String @id @default(uuid())
-  nome String
+  id        String @id @default(uuid())
+  nome      String
   sobrenome String
-  email String
-  senha String
-  dt_criacao DateTime @default(now())
+  email     String @unique
+  senha     String
+
+  cargoId Int
+  cargo   Cargos @relation(fields: [cargoId], references: [id])
+
+  dt_criacao     DateTime @default(now())
   dt_atualizacao DateTime @updatedAt()
+
   @@map("usuarios")
 }
