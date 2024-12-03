@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { prismaConfig } from 'src/config/prismaConfig';
+import { formatarDataISO } from 'src/functions/FormataData';
 
 const { usuarios } = prismaConfig;
 
@@ -82,7 +83,8 @@ export class UsuariosService {
       if (nomeUsuario) {
         const [ano, mes, dia] = nomeUsuario.dt_criacao.toISOString().slice(0, 10).split("-")
 
-        const dataFormatada = `${dia}/${mes}/${ano}`
+        // const dataFormatada = `${dia}/${mes}/${ano}`
+        const dataFormatada = formatarDataISO(nomeUsuario.dt_criacao)
 
         const infor = {
           id: nomeUsuario.id,
