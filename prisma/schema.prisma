@@ -20,3 +20,14 @@ model Cargos {
   dt_atualizacao DateTime @updatedAt()
   @@map("cargos")
 }
+
+model Usuarios {
+  id String @id @default(uuid())
+  nome String
+  sobrenome String
+  email String
+  senha String
+  dt_criacao DateTime @default(now())
+  dt_atualizacao DateTime @updatedAt()
+  @@usuarios
+}
