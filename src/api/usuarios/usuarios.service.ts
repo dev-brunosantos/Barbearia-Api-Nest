@@ -80,7 +80,20 @@ export class UsuariosService {
       })
 
       if (nomeUsuario) {
-        return nomeUsuario
+        const [ano, mes, dia] = nomeUsuario.dt_criacao.toISOString().slice(0, 10).split("-")
+
+        const dataFormatada = `${dia}/${mes}/${ano}`
+
+        const infor = {
+          id: nomeUsuario.id,
+          nome: nomeUsuario.nome,
+          sobrenome: nomeUsuario.sobrenome,
+          email: nomeUsuario.email,
+          cargo: nomeUsuario.cargo.cargo,
+          cadastro: dataFormatada
+        }
+
+        return infor
       }
 
       return `Não existe usuário cadastrado com o nome: ${nome}.`
