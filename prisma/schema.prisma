@@ -28,7 +28,7 @@ model Usuarios {
   id String @id @default(uuid())
   nome String
   sobrenome String
-  email String
+  email String @unique
   senha String
   dt_criacao DateTime @default(now())
   dt_atualizacao DateTime @updatedAt()
