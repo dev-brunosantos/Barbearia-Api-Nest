@@ -29,5 +29,5 @@ model Usuarios {
   senha String
   dt_criacao DateTime @default(now())
   dt_atualizacao DateTime @updatedAt()
-  @@usuarios
+  @@map("usuarios")
 }
