@@ -18,6 +18,9 @@ model Cargos {
   cargo String
   dt_criacao DateTime @default(now())
   dt_atualizacao DateTime @updatedAt()
+
+  usuarios Usuarios[]
+
   @@map("cargos")
 }
 
@@ -29,5 +32,9 @@ model Usuarios {
   senha String
   dt_criacao DateTime @default(now())
   dt_atualizacao DateTime @updatedAt()
+
+  cargoId Int 
+  cargo Cargos @relation(fields: [cargoId], references: [id])
+
   @@map("usuarios")
 }
