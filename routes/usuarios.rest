@@ -15,3 +15,15 @@ GET http://localhost:3000/usuarios
 
 ### GET
 GET http://localhost:3000/usuarios/bruno
+
+### PATCH
+PATCH http://localhost:3000/usuarios/88577383-526d-4789-816f-d146a3e732f1
+Content-Type: application/json
+
+{
+    "nome": "",
+    "sobrenome": "Santos",
+    "email": "saradossantos@gmail.com",
+    "senha": "SaraSara",
+    "tipoCargo": "Desenvolvedor"
+}
