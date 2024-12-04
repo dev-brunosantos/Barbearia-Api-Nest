@@ -1,1 +1,4 @@
-export class CreateServicoDto {}
+export class CreateServicoDto {
+    tipo: string;
+    preco: number;
+}
