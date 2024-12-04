@@ -1,5 +1,7 @@
-export function FormataCargo(tipoCargo: string, cargo: number) {
-    
+export function FormataCargo(tipoCargo: string) {
+
+    let cargo = 0;
+
     switch (tipoCargo) {
         case "Desenvolvedor":
             cargo = 3
