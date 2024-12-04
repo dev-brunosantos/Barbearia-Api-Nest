@@ -39,3 +39,11 @@ model Usuarios {
 
   @@map("usuarios")
 }
+
+model Servicos {
+  id Int @id
+  tipo String @unique
+  preco Float
+
+  @@map("servicos")
+}
