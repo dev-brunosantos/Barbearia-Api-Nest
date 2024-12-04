@@ -12,8 +12,6 @@ export class UsuariosService {
   async CadastrarUsuario(createUsuarioDto: CreateUsuarioDto) {
     const { nome, sobrenome, email, senha, tipoCargo } = createUsuarioDto
 
-    // var cargo = 0;
-
     try {
       const usuarioExistente = await usuarios.findFirst({ where: { email } })
 
