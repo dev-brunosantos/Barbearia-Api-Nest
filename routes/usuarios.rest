@@ -17,7 +17,7 @@ GET http://localhost:3000/usuarios
 GET http://localhost:3000/usuarios/teste
 
 ### PATCH
-PATCH http://localhost:3000/usuarios/df755a56-a5be-4e9c-b02d-0b6f95b40383
+PATCH http://localhost:3000/usuarios/ff3addde-6314-46ca-8228-a59bf7b6a16a
 Content-Type: application/json
 
 {
@@ -25,7 +25,7 @@ Content-Type: application/json
     "sobrenome": "testeteste",
     "email": "teste@gmail.com",
     "senha": "teste",
-    "tipoCargo": "Desenvolvedor"
+    "tipoCargo": "Profissional"
 }
 
 ### DELETE

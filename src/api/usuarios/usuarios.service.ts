@@ -3,6 +3,7 @@ import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { prismaConfig } from 'src/config/prismaConfig';
 import { formatarDataISO } from 'src/functions/FormataData';
+import { FormataCargo } from 'src/functions/FormataCargo';
 
 const { usuarios } = prismaConfig;
 
@@ -11,28 +12,16 @@ export class UsuariosService {
   async CadastrarUsuario(createUsuarioDto: CreateUsuarioDto) {
     const { nome, sobrenome, email, senha, tipoCargo } = createUsuarioDto
 
-    var cargo = 0;
+    // var cargo = 0;
 
     try {
       const usuarioExistente = await usuarios.findFirst({ where: { email } })
 
       if (!usuarioExistente) {
-        switch (tipoCargo) {
-          case "Desenvolvedor":
-            cargo = 3
-            break;
-          case "Cliente":
-            cargo = 4
-            break;
-          case "Profissional":
-            cargo = 5
-            break;
-          default:
-            return "Cargo inválido ou não encontrado."
-        }
+        let cargo = FormataCargo(tipoCargo) //TESTANDO FUNÇÃO DINAMICA PARA VALIDAR FUNÇÃO DO USUÁRIO
 
         const cadastrar = await usuarios.create({
-          data: { nome, sobrenome, email, senha, cargoId: cargo }
+          data: { nome, sobrenome, email, senha, cargoId: Number(cargo) }
         })
 
         return `Usuário(a) ${cadastrar.nome.toUpperCase()} ${cadastrar.sobrenome.toUpperCase()} foi cadastrado com sucesso.`
@@ -107,23 +96,9 @@ export class UsuariosService {
 
       const usuarioID = await usuarios.findFirst({ where: { id } })
 
-      let cargo = 0;
-
       if (usuarioID) {
 
-        switch (tipoCargo) {
-          case "Desenvolvedor":
-            cargo = 3
-            break;
-          case "Cliente":
-            cargo = 4
-            break;
-          case "Profissional":
-            cargo = 5
-            break;
-          default:
-            return "Cargo inválido ou não encontrado."
-        }
+        let cargo = FormataCargo(tipoCargo) //TESTANDO FUNÇÃO DINAMICA PARA VALIDAR FUNÇÃO DO USUÁRIO
 
         const usuarioEditado = await usuarios.update({
           where: { id },
@@ -132,7 +107,7 @@ export class UsuariosService {
             sobrenome: sobrenome === "" ? usuarioID.sobrenome : sobrenome, 
             email: email === "" ? usuarioID.email : email, 
             senha: senha.trim() === "" ? usuarioID.senha : senha, 
-            cargoId: !cargo ? usuarioID.cargoId : cargo
+            cargoId: !cargo ? usuarioID.cargoId : Number(cargo)
           }
         })
 
