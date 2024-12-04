@@ -81,12 +81,9 @@ export class UsuariosService {
       })
 
       if (nomeUsuario) {
-        const [ano, mes, dia] = nomeUsuario.dt_criacao.toISOString().slice(0, 10).split("-")
+        let dataFormatada = formatarDataISO(nomeUsuario.dt_criacao)
 
-        // const dataFormatada = `${dia}/${mes}/${ano}`
-        const dataFormatada = formatarDataISO(nomeUsuario.dt_criacao)
-
-        const infor = {
+        let infor = {
           id: nomeUsuario.id,
           nome: nomeUsuario.nome,
           sobrenome: nomeUsuario.sobrenome,
