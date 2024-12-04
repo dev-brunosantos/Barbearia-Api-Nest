@@ -3,27 +3,30 @@ POST http://localhost:3000/usuarios
 Content-Type: application/json
 
 {
-    "nome": "Sara",
+    "nome": "teste",
     "sobrenome": "",
-    "email": "sarasantos@gmail.com",
-    "senha": "SaraSara",
-    "tipoCargo": "Desenvolvedor"
+    "email": "teste@gmail.com",
+    "senha": "teste",
+    "tipoCargo": "Cliente"
 }
 
 ### GET
 GET http://localhost:3000/usuarios
 
 ### GET
-GET http://localhost:3000/usuarios/bruno
+GET http://localhost:3000/usuarios/teste
 
 ### PATCH
-PATCH http://localhost:3000/usuarios/88577383-526d-4789-816f-d146a3e732f1
+PATCH http://localhost:3000/usuarios/df755a56-a5be-4e9c-b02d-0b6f95b40383
 Content-Type: application/json
 
 {
     "nome": "",
-    "sobrenome": "Santos",
-    "email": "saradossantos@gmail.com",
-    "senha": "SaraSara",
+    "sobrenome": "testeteste",
+    "email": "teste@gmail.com",
+    "senha": "teste",
     "tipoCargo": "Desenvolvedor"
 }
+
+### DELETE
+DELETE http://localhost:3000/usuarios/6de6148e-3135-45bc-b48d-474c78db57cb
