@@ -101,8 +101,52 @@ export class UsuariosService {
     }
   }
 
-  update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
-    return `This action updates a #${id} usuario`;
+  async EditarUsuario(id: string, updateUsuarioDto: UpdateUsuarioDto) {
+    try {
+      const { nome, sobrenome, email, senha, tipoCargo } = updateUsuarioDto;
+
+      const usuarioID = await usuarios.findFirst({ where: { id } })
+
+      let cargo = 0;
+
+      if (usuarioID) {
+
+        switch (tipoCargo) {
+          case "Desenvolvedor":
+            cargo = 3
+            break;
+          case "Cliente":
+            cargo = 4
+            break;
+          case "Profissional":
+            cargo = 5
+            break;
+          default:
+            return "Cargo inválido ou não encontrado."
+        }
+
+        const usuarioEditado = await usuarios.update({
+          where: { id },
+          data: {
+            nome: nome === "" ? usuarioID.nome : nome, 
+            sobrenome: sobrenome === "" ? usuarioID.sobrenome : sobrenome, 
+            email: email === "" ? usuarioID.email : email, 
+            senha: senha.trim() === "" ? usuarioID.senha : senha, 
+            cargoId: !cargo ? usuarioID.cargoId : cargo
+          }
+        })
+
+        return {
+          status: "A edição foi concluída com sucesso.",
+          dados_antigos: usuarioID, 
+          dados_atualizados: usuarioEditado
+        }
+      }
+
+      return `Não foi encontrado nenhum usuário com o ID=${id}`
+    } catch (error) {
+      return "Erro interno. Não conseguimos realizar a consulta do usuário através do ID, por gentileza, tente novamente."
+    }
   }
 
   remove(id: number) {
