@@ -1,11 +1,36 @@
 import { Injectable } from '@nestjs/common';
 import { CreateServicoDto } from './dto/create-servico.dto';
 import { UpdateServicoDto } from './dto/update-servico.dto';
+import { prismaConfig } from 'src/config/prismaConfig';
+
+
+const { servicos } = prismaConfig;
 
 @Injectable()
 export class ServicosService {
-  create(createServicoDto: CreateServicoDto) {
-    return 'This action adds a new servico';
+  async CriarServicos(createServicoDto: CreateServicoDto) {
+    var { id, tipo, preco } = createServicoDto;
+    try {
+      const servicoJaCadastrado = await servicos.findFirst({ where: { tipo } })
+
+      id = Math.floor(Math.random() * 10000) + 1
+
+      if(id === servicoJaCadastrado.id) {
+        id = servicoJaCadastrado.id * 2
+      }
+
+      if(!servicoJaCadastrado) {
+        const cadastrar = await servicos.create({
+          data: {
+            id, tipo, preco
+          }
+        })
+
+        return `O serviço ${cadastrar.tipo} foi cadastrado com sucesso.`
+      }
+    } catch (error) {
+      return "Erro interno! Tivemos um erro ao realizar o procedimento de cadastrado. Por favor tente novamente."
+    }
   }
 
   findAll() {
