@@ -149,7 +149,7 @@ export class UsuariosService {
     }
   }
 
-  async remove(id: string) {
+  async ExcluirUsuario(id: string) {
     try {
       const idUsuario = await usuarios.findFirst({ where: { id }})
       
