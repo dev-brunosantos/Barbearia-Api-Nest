@@ -34,7 +34,7 @@ model Usuarios {
   cargoId Int
   cargo   Cargos @relation(fields: [cargoId], references: [id])
 
-  servicos Servicos[] 
+  // servicos Servicos[] 
 
 
   dt_criacao     DateTime @default(now())
@@ -48,8 +48,8 @@ model Servicos {
   tipo String @unique
   preco Float
 
-  prof_id String
-  usuarios Usuarios @relation(fields: [prof_id], references: [id])
+  // prof_id String
+  // usuarios Usuarios @relation(fields: [prof_id], references: [id])
 
   @@map("servicos")
 }
