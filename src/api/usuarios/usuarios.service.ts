@@ -149,7 +149,16 @@ export class UsuariosService {
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} usuario`;
+  async remove(id: string) {
+    try {
+      const idUsuario = await usuarios.findFirst({ where: { id }})
+      
+      if(idUsuario) {
+        await usuarios.delete({ where: {id}})
+        return `Os dados do usuário ${idUsuario.nome} ${idUsuario.sobrenome} foram excluídos com sucesso.`
+      }
+    } catch (error) {
+      return "Erro interno! Não foi possível realizar a consulta dos dados do usuário informado. Por favor, tente novamente."
+    }
   }
 }
