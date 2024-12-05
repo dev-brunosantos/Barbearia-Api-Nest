@@ -8,17 +8,17 @@ export class ServicosController {
   constructor(private readonly servicosService: ServicosService) {}
 
   @Post()
-  create(@Body() createServicoDto: CreateServicoDto) {
+  Criar(@Body() createServicoDto: CreateServicoDto) {
     return this.servicosService.CriarServicos(createServicoDto);
   }
 
   @Get()
-  findAll() {
+  Listar() {
     return this.servicosService.ListarServicos();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  ServicoID(@Param('id') id: string) {
     return this.servicosService.ServicoID(+id);
   }
  
@@ -28,12 +28,12 @@ export class ServicosController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateServicoDto: UpdateServicoDto) {
+  Editar(@Param('id') id: string, @Body() updateServicoDto: UpdateServicoDto) {
     return this.servicosService.EditarServico(+id, updateServicoDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  Apagar(@Param('id') id: string) {
     return this.servicosService.ApagarServico(+id);
   }
 }
