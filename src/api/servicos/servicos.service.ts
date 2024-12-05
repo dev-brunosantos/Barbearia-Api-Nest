@@ -61,10 +61,12 @@ export class ServicosService {
   async ServicoNome(tipo: string) {
     try {
       const nomeServico = await servicos.findMany({
-        where: { tipo: {
-          contains: tipo,
-          mode: 'insensitive'
-        } }
+        where: {
+          tipo: {
+            contains: tipo,
+            mode: 'insensitive'
+          }
+        }
       })
 
       if (!nomeServico) {
@@ -101,6 +103,8 @@ export class ServicosService {
           dados_atualizados: editado
         }
       }
+
+      return "Não existe nenhum serviço com o ID informado."
     } catch (error) {
       return "Erro interno! Não conseguimos realizar a consulta dos serviços no sistema para realizar as atualizações dos dados. Por favor, tente novamente."
     }
