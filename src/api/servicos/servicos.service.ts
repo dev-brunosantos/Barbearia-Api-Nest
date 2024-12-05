@@ -103,7 +103,7 @@ export class ServicosService {
     }
   }
 
-  async Apagar(id: number) {
+  async ApagarServico(id: number) {
     try {
       const idServidoExistente = await servicos.findFirst({ where: { id }})
       if(idServidoExistente) {
