@@ -15,10 +15,6 @@ export class ServicosService {
 
       id = Math.floor(Math.random() * 10000) + 1
 
-      if (id === servicoJaCadastrado.id) {
-        id = servicoJaCadastrado.id * 2
-      }
-
       if (!servicoJaCadastrado) {
         const cadastrar = await servicos.create({
           data: {
@@ -37,7 +33,7 @@ export class ServicosService {
     try {
       const listaDeServicos = await servicos.findMany()
 
-      if (!listaDeServicos) {
+      if (listaDeServicos.length === 0) {
         return "Não existe nenhum serviço cadastrado no sistema."
       }
 
@@ -64,11 +60,18 @@ export class ServicosService {
 
   async ServicoNome(tipo: string) {
     try {
-      const nomeServico = await servicos.findFirst({ where: { tipo } })
+      const nomeServico = await servicos.findMany({
+        where: { tipo: {
+          contains: tipo,
+          mode: 'insensitive'
+        } }
+      })
 
       if (!nomeServico) {
         return `Não existe nenhum serviço com o nome ${tipo} cadastrado no sistema.`
       }
+
+      console.log(tipo)
 
       return nomeServico
 
@@ -83,9 +86,9 @@ export class ServicosService {
 
       const servicoId = await servicos.findFirst({ where: { id } })
 
-      if(servicoId) {
+      if (servicoId) {
         const editado = await servicos.update({
-          where: {id},
+          where: { id },
           data: {
             tipo: tipo.trim() === "" ? servicoId.tipo : tipo,
             preco: preco === 0 ? servicoId.preco : preco
@@ -105,11 +108,11 @@ export class ServicosService {
 
   async ApagarServico(id: number) {
     try {
-      const idServidoExistente = await servicos.findFirst({ where: { id }})
-      if(idServidoExistente) {
-        await servicos.delete({ where: { id }})
+      const idServidoExistente = await servicos.findFirst({ where: { id } })
+      if (idServidoExistente) {
+        await servicos.delete({ where: { id } })
         return `Os dados do servico ${idServidoExistente.tipo} foram excluídos com sucesso.`
-      } 
+      }
 
       return `Não foi encontrado nenhum servico com o ID=${id}`
     } catch (error) {
