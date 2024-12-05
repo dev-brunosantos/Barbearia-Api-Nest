@@ -9,26 +9,26 @@ export class ServicosController {
 
   @Post()
   create(@Body() createServicoDto: CreateServicoDto) {
-    return this.servicosService.create(createServicoDto);
+    return this.servicosService.CriarServicos(createServicoDto);
   }
 
   @Get()
   findAll() {
-    return this.servicosService.findAll();
+    return this.servicosService.ListarServicos();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.servicosService.findOne(+id);
+    return this.servicosService.ServicoID(+id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateServicoDto: UpdateServicoDto) {
-    return this.servicosService.update(+id, updateServicoDto);
+    return this.servicosService.EditarServico(+id, updateServicoDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.servicosService.remove(+id);
+    return this.servicosService.ApagarServico(+id);
   }
 }
