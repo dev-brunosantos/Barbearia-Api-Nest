@@ -1,4 +1,7 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateServicoDto } from './create-servico.dto';
 
-export class UpdateServicoDto extends PartialType(CreateServicoDto) {}
+export class UpdateServicoDto extends PartialType(CreateServicoDto) {
+    tipo: string;
+    preco: number;
+}
