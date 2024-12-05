@@ -11,13 +11,13 @@ Content-Type: application/json
 GET http://localhost:3000/servicos
 
 ### GET
-GET http://localhost:3000/servicos/8575
+GET http://localhost:3000/servicos/619
 
 ### GET
 GET http://localhost:3000/servicos/Corte
 
 ### PATCH
-PATCH http://localhost:3000/servicos/8548
+PATCH http://localhost:3000/servicos/6190
 Content-Type: application/json
 
 {
