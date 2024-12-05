@@ -22,9 +22,9 @@ export class ServicosController {
     return this.servicosService.ServicoID(+id);
   }
  
-  @Get(':nome')
-  ServicoNome(@Param('nome') nome: string) {
-    return this.servicosService.ServicoNome(nome);
+  @Get(':tipo')
+  ServicoNome(@Param('nome') tipo: string) {
+    return this.servicosService.ServicoNome(tipo);
   }
 
   @Patch(':id')
