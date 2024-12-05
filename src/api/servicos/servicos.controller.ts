@@ -21,6 +21,11 @@ export class ServicosController {
   findOne(@Param('id') id: string) {
     return this.servicosService.ServicoID(+id);
   }
+ 
+  @Get(':nome')
+  ServicoNome(@Param('nome') nome: string) {
+    return this.servicosService.ServicoNome(nome);
+  }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateServicoDto: UpdateServicoDto) {
