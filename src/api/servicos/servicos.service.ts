@@ -1,5 +1,5 @@
 import { PrismaService } from './../../prisma/prisma.service';
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateServicoDto } from './dto/create-servico.dto';
 import { UpdateServicoDto } from './dto/update-servico.dto';
 import { prismaConfig } from 'src/config/prismaConfig';
@@ -10,27 +10,45 @@ const { servicos } = prismaConfig;
 @Injectable()
 export class ServicosService {
 
-  constructor(private prisma: PrismaService){}
+  constructor(private prisma: PrismaService) { }
 
   async CriarServicos(createServicoDto: CreateServicoDto) {
-    var { id, tipo, preco } = createServicoDto;
-    try {
-      const servicoJaCadastrado = await servicos.findFirst({ where: { tipo } })
+    // var { id, tipo, preco } = createServicoDto;
+    // try {
+    //   const servicoJaCadastrado = await servicos.findFirst({ where: { tipo } })
 
-      id = Math.floor(Math.random() * 10000) + 1
+    //   id = Math.floor(Math.random() * 10000) + 1
 
-      if (!servicoJaCadastrado) {
-        const cadastrar = await servicos.create({
-          data: {
-            id, tipo, preco
-          }
-        })
+    //   if (!servicoJaCadastrado) {
+    //     const cadastrar = await servicos.create({
+    //       data: {
+    //         id, tipo, preco
+    //       }
+    //     })
 
-        return `O serviço ${cadastrar.tipo} foi cadastrado com sucesso.`
-      }
-    } catch (error) {
-      return "Erro interno! Tivemos um erro ao realizar o procedimento de cadastrado. Por favor tente novamente."
+    //     return `O serviço ${cadastrar.tipo} foi cadastrado com sucesso.`
+    //   }
+    // } catch (error) {
+    //   return "Erro interno! Tivemos um erro ao realizar o procedimento de cadastrado. Por favor tente novamente."
+    // }
+    const servicoJaCadastrado = await this.prisma.servicos.findFirst({
+      where: { tipo: createServicoDto.tipo }
+    })
+
+    var id = Math.floor(Math.random() * 10000) + 1
+
+    if (!servicoJaCadastrado) {
+      const cadastrar = await servicos.create({
+        data: {
+          id,
+          tipo: createServicoDto.tipo,
+          preco: createServicoDto.preco
+        }
+      })
+
+      return `O serviço ${cadastrar.tipo.toUpperCase()} foi cadastrado com sucesso.`
     }
+    throw new HttpException("Erro interno! Tivemos um erro ao realizar o procedimento de cadastrado. Por favor tente novamente.", HttpStatus.BAD_REQUEST)
   }
 
   async ListarServicos() {
