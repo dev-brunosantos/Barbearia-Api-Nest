@@ -5,10 +5,15 @@ import { prismaConfig } from 'src/config/prismaConfig';
 import { formatarDataISO } from 'src/functions/FormataData';
 import { FormataCargo } from 'src/functions/FormataCargo';
 
+import { PrismaService } from './../../prisma/prisma.service';
+
 const { usuarios } = prismaConfig;
 
 @Injectable()
 export class UsuariosService {
+
+  constructor(private prisma: PrismaService) {}
+
   async CadastrarUsuario(createUsuarioDto: CreateUsuarioDto) {
     const { nome, sobrenome, email, senha, tipoCargo } = createUsuarioDto
 
@@ -27,7 +32,7 @@ export class UsuariosService {
     } catch (error) {
       return "Erro interno. Tivemos um erro ao tentar cadastar um novo usuário no sistema. Por favor, tente novamente."
     }
-  }
+  }   
 
   async ListarUsuarios() {
     try {
@@ -135,3 +140,14 @@ export class UsuariosService {
     }
   }
 }
+
+
+
+
+
+
+
+
+
+ fccccccccccccccccccccccccc fbvbvvcfb nthhhhhhhhh    bbbbb    
+ uuuuhhmu..k                         
