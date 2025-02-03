@@ -202,22 +202,25 @@ export class UsuariosService {
       }
 
       throw new HttpException("O ID informado nâo esta vinculado a nenhum usuário cadastrado no sistema.", HttpStatus.NOT_FOUND)
-      
+
     } catch (error) {
-      throw new HttpException("O servidor apresentou algumas falhas. Por favor, tente novamente.", HttpStatus.INTERNAL_SERVER_ERROR)
+      throw new HttpException("Erro interno! Não foi possível realizar a consulta dos dados do usuário informado. Por favor, tente novamente.", HttpStatus.INTERNAL_SERVER_ERROR)
     }
   }
 
   async ExcluirUsuario(id: string) {
     try {
-      const idUsuario = await usuarios.findFirst({ where: { id } })
+      const idUsuario = await this.prisma.usuarios.findFirst({ where: { id } })
 
       if (idUsuario) {
-        await usuarios.delete({ where: { id } })
-        return `Os dados do usuário ${idUsuario.nome} ${idUsuario.sobrenome} foram excluídos com sucesso.`
+        const usuario = await this.prisma.usuarios.delete({ where: { id } })
+        return `Os dados do usuário ${usuario.nome.toUpperCase()} ${usuario.sobrenome.toUpperCase()} foram excluídos com sucesso.`
       }
+
+      throw new HttpException("O ID informado nâo esta vinculado a nenhum usuário cadastrado no sistema.", HttpStatus.NOT_FOUND)
+
     } catch (error) {
-      return "Erro interno! Não foi possível realizar a consulta dos dados do usuário informado. Por favor, tente novamente."
+      throw new HttpException("Erro interno! Não foi possível realizar a consulta dos dados do usuário informado. Por favor, tente novamente.", HttpStatus.INTERNAL_SERVER_ERROR)
     }
   }
 }
