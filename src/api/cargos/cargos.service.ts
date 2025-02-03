@@ -168,7 +168,9 @@ export class CargosService {
 
   async ApagarCargo(id: number) {
     try {
-      const cargoID = await this.prisma.cargos.findFirst({ where: { id } })
+      const cargoID = await this.prisma.cargos.findFirst({
+        where: { id }
+      })
 
       if (cargoID) {
         await this.prisma.cargos.delete({ where: { id } })
