@@ -160,7 +160,7 @@ export class CargosService {
       }
 
       throw new HttpException("O ID informado não esta vindulado a nenhum cargo cadastrado no sistema.", HttpStatus.NOT_FOUND)
-      
+
     } catch (error) {
       throw new HttpException(`Erro interno! Não foi possível realizar a consulta dos dados do usuário informado. Por favor, tente novamente. \n ${error}`, HttpStatus.INTERNAL_SERVER_ERROR)
     }
@@ -168,16 +168,17 @@ export class CargosService {
 
   async ApagarCargo(id: number) {
     try {
-      const cargoID = await cargos.findFirst({ where: { id } })
+      const cargoID = await this.prisma.cargos.findFirst({ where: { id } })
 
       if (cargoID) {
-        await cargos.delete({ where: { id } })
+        await this.prisma.cargos.delete({ where: { id } })
         return "O cargo foi excluído como solicitado."
       }
 
-      return `Não foi encontrado nenhum cargo com o ID=${id}`
+      throw new HttpException("O ID informado não esta vindulado a nenhum cargo cadastrado no sistema.", HttpStatus.NOT_FOUND)
+
     } catch (error) {
-      return "Tivemos um erro ao tentar buscar os dados do cargo solicitado."
+      throw new HttpException(`Erro interno! Não foi possível realizar a consulta dos dados do usuário informado. Por favor, tente novamente. \n ${error}`, HttpStatus.INTERNAL_SERVER_ERROR)
     }
   }
 }
