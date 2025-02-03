@@ -82,18 +82,24 @@ export class CargosService {
   }
 
   async BuscarCargoID(id: number) {
-    try {
-      const cargoID = await cargos.findFirst({ where: { id } })
+    // try {
+    //   const cargoID = await cargos.findFirst({ where: { id } })
 
-      if (cargoID) {
-        return cargoID
-      }
+    //   if (cargoID) {
+    //     return cargoID
+    //   }
 
-      return `Não existe nenhum cargo cadastrado com o ID=${id}`
+    //   return `Não existe nenhum cargo cadastrado com o ID=${id}`
 
-    } catch (error) {
-      return "Não conseguimos realizar a consulta no banco de dados,por favor tente novamente."
+    // } catch (error) {
+    //   return "Não conseguimos realizar a consulta no banco de dados,por favor tente novamente."
+    // }
+    const cargoID = await this.prisma.cargos.findFirst({ where: { id } })
+
+    if (cargoID) {
+      return cargoID
     }
+    throw new HttpException("O ID informado não esta vindulado a nenhum cargo cadastrado no sistema.", HttpStatus.NOT_FOUND)
   }
 
   // async BuscarCargoNome(cargo: string) {
@@ -113,19 +119,37 @@ export class CargosService {
 
   async AtualizarCargo(id: number, updateCargoDto: UpdateCargoDto) {
 
-    const { cargo } = updateCargoDto
+    // const { cargo } = updateCargoDto
 
+    // try {
+    //   const idCargo = await cargos.findFirst({ where: { id } })
+
+    //   if (cargo === idCargo.cargo) {
+    //     return "O nome do cargo informado, é o mesmo que ja esta cadastrado."
+    //   }
+
+    //   if (idCargo) {
+    //     const editar = await cargos.update({
+    //       where: { id },
+    //       data: { cargo }
+    //     })
+
+    //     return {
+    //       "status": "Os dados foram atualizados com sucesso.",
+    //       "dados_antigos": idCargo,
+    //       "dados_atualizados": editar
+    //     }
+    //   }
+    // } catch (error) {
+    //   return `Erro ao tentar atualizar os dados do cargo com ID=${id}`
+    // }
     try {
-      const idCargo = await cargos.findFirst({ where: { id } })
-
-      if (cargo === idCargo.cargo) {
-        return "O nome do cargo informado, é o mesmo que ja esta cadastrado."
-      }
+      const idCargo = await this.prisma.cargos.findFirst({ where: { id } })
 
       if (idCargo) {
         const editar = await cargos.update({
           where: { id },
-          data: { cargo }
+          data: updateCargoDto
         })
 
         return {
@@ -134,8 +158,11 @@ export class CargosService {
           "dados_atualizados": editar
         }
       }
+
+      throw new HttpException("O ID informado não esta vindulado a nenhum cargo cadastrado no sistema.", HttpStatus.NOT_FOUND)
+      
     } catch (error) {
-      return `Erro ao tentar atualizar os dados do cargo com ID=${id}`
+      throw new HttpException(`Erro interno! Não foi possível realizar a consulta dos dados do usuário informado. Por favor, tente novamente. \n ${error}`, HttpStatus.INTERNAL_SERVER_ERROR)
     }
   }
 
