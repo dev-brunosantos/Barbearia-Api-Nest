@@ -52,17 +52,24 @@ export class ServicosService {
   }
 
   async ListarServicos() {
-    try {
-      const listaDeServicos = await servicos.findMany()
+    // try {
+    //   const listaDeServicos = await servicos.findMany()
 
-      if (listaDeServicos.length === 0) {
-        return "Não existe nenhum serviço cadastrado no sistema."
-      }
+    //   if (listaDeServicos.length === 0) {
+    //     return "Não existe nenhum serviço cadastrado no sistema."
+    //   }
 
-      return listaDeServicos
-    } catch (error) {
-      return "Erro interno! Não conseguimos realizar a consulta dos serviços no sistema. Por favor, tente novamente."
+    //   return listaDeServicos
+    // } catch (error) {
+    //   return "Erro interno! Não conseguimos realizar a consulta dos serviços no sistema. Por favor, tente novamente."
+    // }
+    const listaDeServicos = await servicos.findMany()
+
+    if (listaDeServicos.length === 0) {
+      throw new HttpException("Não existe nenhum serviço cadastrado no sistema.", HttpStatus.NOT_FOUND)
     }
+
+    return listaDeServicos
   }
 
   async ServicoID(id: number) {
