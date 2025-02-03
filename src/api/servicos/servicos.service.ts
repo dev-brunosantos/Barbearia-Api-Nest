@@ -119,17 +119,40 @@ export class ServicosService {
   }
 
   async EditarServico(id: number, updateServicoDto: UpdateServicoDto) {
-    try {
-      const { tipo, preco } = updateServicoDto;
+    // try {
+    //   const { tipo, preco } = updateServicoDto;
 
-      const servicoId = await servicos.findFirst({ where: { id } })
+    //   const servicoId = await servicos.findFirst({ where: { id } })
+
+    //   if (servicoId) {
+    //     const editado = await servicos.update({
+    //       where: { id },
+    //       data: {
+    //         tipo: tipo.trim() === "" ? servicoId.tipo : tipo,
+    //         preco: preco === 0 ? servicoId.preco : preco
+    //       }
+    //     })
+
+    //     return {
+    //       status: "Os dados foram atualizados com sucesso.",
+    //       dados_antigos: servicoId,
+    //       dados_atualizados: editado
+    //     }
+    //   }
+
+    //   return "Não existe nenhum serviço com o ID informado."
+    // } catch (error) {
+    //   return "Erro interno! Não conseguimos realizar a consulta dos serviços no sistema para realizar as atualizações dos dados. Por favor, tente novamente."
+    // }
+    try {
+      const servicoId = await this.prisma.servicos.findFirst({ where: { id } })
 
       if (servicoId) {
         const editado = await servicos.update({
           where: { id },
           data: {
-            tipo: tipo.trim() === "" ? servicoId.tipo : tipo,
-            preco: preco === 0 ? servicoId.preco : preco
+            tipo: updateServicoDto.tipo.trim() === "" ? servicoId.tipo : updateServicoDto.tipo,
+            preco: updateServicoDto.preco === 0 ? servicoId.preco : updateServicoDto.preco
           }
         })
 
@@ -140,9 +163,10 @@ export class ServicosService {
         }
       }
 
-      return "Não existe nenhum serviço com o ID informado."
+      throw new HttpException(`Não existe nenhum serviço com o ID=${id} que foi informado.`, HttpStatus.NOT_FOUND)
+
     } catch (error) {
-      return "Erro interno! Não conseguimos realizar a consulta dos serviços no sistema para realizar as atualizações dos dados. Por favor, tente novamente."
+      throw new HttpException("Erro interno! Não conseguimos realizar a consulta dos serviços no sistema para realizar as atualizações dos dados. Por favor, tente novamente.", HttpStatus.NOT_FOUND)
     }
   }
 
