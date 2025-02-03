@@ -144,22 +144,52 @@ export class UsuariosService {
   }
 
   async EditarUsuario(id: string, updateUsuarioDto: UpdateUsuarioDto) {
-    try {
-      const { nome, sobrenome, email, senha, tipoCargo } = updateUsuarioDto;
+    // try {
+    //   const { nome, sobrenome, email, senha, tipoCargo } = updateUsuarioDto;
 
-      const usuarioID = await usuarios.findFirst({ where: { id } })
+    //   const usuarioID = await usuarios.findFirst({ where: { id } })
+
+    //   if (usuarioID) {
+
+    //     let cargo = FormataCargo(tipoCargo) //TESTANDO FUNÇÃO DINAMICA PARA VALIDAR FUNÇÃO DO USUÁRIO
+
+    //     const usuarioEditado = await usuarios.update({
+    //       where: { id },
+    //       data: {
+    //         nome: nome === "" ? usuarioID.nome : nome,
+    //         sobrenome: sobrenome === "" ? usuarioID.sobrenome : sobrenome,
+    //         email: email === "" ? usuarioID.email : email,
+    //         senha: senha.trim() === "" ? usuarioID.senha : senha,
+    //         cargoId: !cargo ? usuarioID.cargoId : Number(cargo)
+    //       }
+    //     })
+
+    //     return {
+    //       status: "A edição foi concluída com sucesso.",
+    //       dados_antigos: usuarioID,
+    //       dados_atualizados: usuarioEditado
+    //     }
+    //   }
+
+    //   return `Não foi encontrado nenhum usuário com o ID=${id}`
+    // } catch (error) {
+    //   return "Erro interno. Não conseguimos realizar a consulta do usuário através do ID, por gentileza, tente novamente."
+    // }
+
+    try {
+      const usuarioID = await this.prisma.usuarios.findFirst({ where: { id } })
 
       if (usuarioID) {
 
-        let cargo = FormataCargo(tipoCargo) //TESTANDO FUNÇÃO DINAMICA PARA VALIDAR FUNÇÃO DO USUÁRIO
+        let cargo = FormataCargo(updateUsuarioDto.tipoCargo) //TESTANDO FUNÇÃO DINAMICA PARA VALIDAR FUNÇÃO DO USUÁRIO
 
-        const usuarioEditado = await usuarios.update({
+        const usuarioEditado = await this.prisma.usuarios.update({
           where: { id },
           data: {
-            nome: nome === "" ? usuarioID.nome : nome,
-            sobrenome: sobrenome === "" ? usuarioID.sobrenome : sobrenome,
-            email: email === "" ? usuarioID.email : email,
-            senha: senha.trim() === "" ? usuarioID.senha : senha,
+            nome: updateUsuarioDto.nome === "" ? usuarioID.nome : updateUsuarioDto.nome,
+            sobrenome: updateUsuarioDto.sobrenome === "" ? usuarioID.sobrenome : updateUsuarioDto.sobrenome,
+            email: updateUsuarioDto.email === "" ? usuarioID.email : updateUsuarioDto.email,
+            senha: updateUsuarioDto.senha.trim() === "" ? usuarioID.senha : updateUsuarioDto.senha,
             cargoId: !cargo ? usuarioID.cargoId : Number(cargo)
           }
         })
@@ -171,9 +201,10 @@ export class UsuariosService {
         }
       }
 
-      return `Não foi encontrado nenhum usuário com o ID=${id}`
+      throw new HttpException("O ID informado nâo esta vinculado a nenhum usuário cadastrado no sistema.", HttpStatus.NOT_FOUND)
+      
     } catch (error) {
-      return "Erro interno. Não conseguimos realizar a consulta do usuário através do ID, por gentileza, tente novamente."
+      throw new HttpException("O servidor apresentou algumas falhas. Por favor, tente novamente.", HttpStatus.INTERNAL_SERVER_ERROR)
     }
   }
 
