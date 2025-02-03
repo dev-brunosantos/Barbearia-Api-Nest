@@ -60,18 +60,25 @@ export class CargosService {
   }
 
   async ListarCargos() {
-    try {
-      const cargosCadastrados = await cargos.findMany()
+    // try {
+    //   const cargosCadastrados = await cargos.findMany()
 
-      if (!cargosCadastrados) {
-        return "Não existe nenhum cargo cadastrado no sistema."
-      }
+    //   if (!cargosCadastrados) {
+    //     return "Não existe nenhum cargo cadastrado no sistema."
+    //   }
 
-      return cargosCadastrados
+    //   return cargosCadastrados
 
-    } catch (error) {
-      return 'Erro ao buscar os dados dos cargos cadastrados no sistema, por favor tente novamente.'
+    // } catch (error) {
+    //   return 'Erro ao buscar os dados dos cargos cadastrados no sistema, por favor tente novamente.'
+    // }
+    const cargosCadastrados = await this.prisma.cargos.findMany()
+
+    if (!cargosCadastrados) {
+      throw new HttpException("Não existe nenhum cargo cadastrado no sistema.", HttpStatus.NOT_FOUND)
     }
+
+    return cargosCadastrados
   }
 
   async BuscarCargoID(id: number) {
