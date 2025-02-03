@@ -3,7 +3,7 @@ POST http://localhost:3000/servicos
 Content-Type: application/json
 
 {
-    "tipo": "Teste de logica",
+    "tipo": "Teste",
     "preco": 30.00
 }
 
@@ -17,12 +17,13 @@ GET http://localhost:3000/servicos/619
 GET http://localhost:3000/servicos/Corte
 
 ### PATCH
-PATCH http://localhost:3000/servicos/6190
+PATCH http://localhost:3000/servicos/619
 Content-Type: application/json
 
 {
-    "tipo": "Teste 1"
+    "tipo": "",
+    "preco": 35
 }
 
 ### DELETE
-DELETE http://localhost:3000/servicos/8548
+DELETE http://localhost:3000/servicos/619
