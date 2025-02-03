@@ -1,6 +1,6 @@
-import { Cargos } from './../../../node_modules/.prisma/client/index.d';
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateCargoDto } from './dto/create-cargo.dto';
+import { PrismaService } from './../../prisma/prisma.service';
 import { UpdateCargoDto } from './dto/update-cargo.dto';
 import { prismaConfig } from 'src/config/prismaConfig';
 
@@ -8,34 +8,55 @@ const { cargos } = prismaConfig
 
 @Injectable()
 export class CargosService {
+
+  constructor(private prisma: PrismaService) { }
+
   async CriarCargo(createCargoDto: CreateCargoDto) {
-
-    const { cargo } = createCargoDto
-
-    try {
-      const cargoExistente = await cargos.findFirst({
-        where: {
-          cargo: {
-            equals: cargo,
-            mode: "insensitive"
-          }
+    const cargoExistente = await this.prisma.cargos.findFirst({
+      where: {
+        cargo: {
+          equals: createCargoDto.cargo,
+          mode: "insensitive"
         }
-      })
-
-      if (cargoExistente) {
-        return `O cargo ${cargoExistente.cargo.toUpperCase()} já esta cadastrado no sistema.`
       }
+    })
 
-      const criar = await cargos.create({
-        data: {
-          cargo
-        }
-      })
-
-      return `O cargo ${criar.cargo.toUpperCase()} foi criado com sucesso.`
-    } catch (error) {
-      return 'Erro ao criar cargo, por favor tente novamente.'
+    if (cargoExistente) {
+      throw new HttpException(`O cargo ${cargoExistente.cargo.toUpperCase()} já esta cadastrado no sistema.`, HttpStatus.BAD_REQUEST)
     }
+
+    const criar = await cargos.create({
+      data: {
+        cargo: createCargoDto.cargo
+      }
+    })
+
+    return `O cargo ${criar.cargo.toUpperCase()} foi criado com sucesso.`
+
+    // try {
+    //   const cargoExistente = await cargos.findFirst({
+    //     where: {
+    //       cargo: {
+    //         equals: cargo,
+    //         mode: "insensitive"
+    //       }
+    //     }
+    //   })
+
+    //   if (cargoExistente) {
+    //     return `O cargo ${cargoExistente.cargo.toUpperCase()} já esta cadastrado no sistema.`
+    //   }
+
+    //   const criar = await cargos.create({
+    //     data: {
+    //       cargo
+    //     }
+    //   })
+
+    //   return `O cargo ${criar.cargo.toUpperCase()} foi criado com sucesso.`
+    // } catch (error) {
+    //   return 'Erro ao criar cargo, por favor tente novamente.'
+    // }
   }
 
   async ListarCargos() {
@@ -90,7 +111,7 @@ export class CargosService {
     try {
       const idCargo = await cargos.findFirst({ where: { id } })
 
-      if(cargo === idCargo.cargo) {
+      if (cargo === idCargo.cargo) {
         return "O nome do cargo informado, é o mesmo que ja esta cadastrado."
       }
 
@@ -101,7 +122,7 @@ export class CargosService {
         })
 
         return {
-          "status":"Os dados foram atualizados com sucesso.",
+          "status": "Os dados foram atualizados com sucesso.",
           "dados_antigos": idCargo,
           "dados_atualizados": editar
         }
@@ -113,10 +134,10 @@ export class CargosService {
 
   async ApagarCargo(id: number) {
     try {
-      const cargoID = await cargos.findFirst({where: {id}})
+      const cargoID = await cargos.findFirst({ where: { id } })
 
-      if(cargoID) {
-        await cargos.delete({ where: {id}})
+      if (cargoID) {
+        await cargos.delete({ where: { id } })
         return "O cargo foi excluído como solicitado."
       }
 
