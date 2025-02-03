@@ -20,7 +20,7 @@ PATCH http://localhost:3000/cargos/2
 Content-Type: application/json
 
 {
-    "cargo": "Teste 1"
+    "cargo": "Teste 1 1"
 }
 
 ### DELETE
