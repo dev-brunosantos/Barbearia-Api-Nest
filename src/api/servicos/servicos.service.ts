@@ -1,3 +1,4 @@
+import { PrismaService } from './../../prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { CreateServicoDto } from './dto/create-servico.dto';
 import { UpdateServicoDto } from './dto/update-servico.dto';
@@ -8,6 +9,9 @@ const { servicos } = prismaConfig;
 
 @Injectable()
 export class ServicosService {
+
+  constructor(private prisma: PrismaService){}
+
   async CriarServicos(createServicoDto: CreateServicoDto) {
     var { id, tipo, preco } = createServicoDto;
     try {
