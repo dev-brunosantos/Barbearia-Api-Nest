@@ -4,8 +4,8 @@ import { CargosService } from './cargos.service';
 import { CargosController } from './cargos.controller';
 
 @Module({
-  imports: [PrismaModule],
-  controllers: [CargosController],
-  providers: [CargosService],
+    imports: [PrismaModule],
+    controllers: [CargosController],
+    providers: [CargosService]
 })
 export class CargosModule {}

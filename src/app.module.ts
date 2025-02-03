@@ -5,8 +5,8 @@ import { ServicosModule } from './api/servicos/servicos.module';
 import { AgendasModule } from './api/agendas/agendas.module';
 
 @Module({
-  imports: [UsuariosModule, CargosModule, ServicosModule, AgendasModule],
-  controllers: [],
-  providers: [],
+    imports: [UsuariosModule, CargosModule, ServicosModule, AgendasModule],
+    controllers: [],
+    providers: []
 })
 export class AppModule {}
