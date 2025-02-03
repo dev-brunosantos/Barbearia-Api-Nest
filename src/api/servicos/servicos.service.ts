@@ -63,7 +63,7 @@ export class ServicosService {
     // } catch (error) {
     //   return "Erro interno! Não conseguimos realizar a consulta dos serviços no sistema. Por favor, tente novamente."
     // }
-    const listaDeServicos = await servicos.findMany()
+    const listaDeServicos = await this.prisma.servicos.findMany()
 
     if (listaDeServicos.length === 0) {
       throw new HttpException("Não existe nenhum serviço cadastrado no sistema.", HttpStatus.NOT_FOUND)
@@ -73,18 +73,25 @@ export class ServicosService {
   }
 
   async ServicoID(id: number) {
-    try {
-      const idServico = await servicos.findFirst({ where: { id } })
+    // try {
+    //   const idServico = await servicos.findFirst({ where: { id } })
+
+    //   if (!idServico) {
+    //     return `Não existe nenhum serviço com o ID=${id} que foi informado.`
+    //   }
+
+    //   return idServico
+
+    // } catch (error) {
+    //   return "Erro interno! Não conseguimos realizar a consulta dos serviços no sistema. Por favor, tente novamente."
+    // }
+      const idServico = await this.prisma.servicos.findFirst({ where: { id } })
 
       if (!idServico) {
-        return `Não existe nenhum serviço com o ID=${id} que foi informado.`
+        throw new HttpException(`Não existe nenhum serviço com o ID=${id} que foi informado.`, HttpStatus.NOT_FOUND)
       }
 
       return idServico
-
-    } catch (error) {
-      return "Erro interno! Não conseguimos realizar a consulta dos serviços no sistema. Por favor, tente novamente."
-    }
   }
 
   async ServicoNome(tipo: string) {
