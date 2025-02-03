@@ -1,32 +1,42 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { prismaConfig } from 'src/config/prismaConfig';
 import { formatarDataISO } from 'src/functions/FormataData';
 import { FormataCargo } from 'src/functions/FormataCargo';
 
+import { PrismaService } from './../../prisma/prisma.service';
+
 const { usuarios } = prismaConfig;
 
 @Injectable()
 export class UsuariosService {
+
+  constructor(private prisma: PrismaService) { }
+
   async CadastrarUsuario(createUsuarioDto: CreateUsuarioDto) {
-    const { nome, sobrenome, email, senha, tipoCargo } = createUsuarioDto
+    
+    const usuarioExistente = await this.prisma.usuarios.findFirst({
+      where: { email: createUsuarioDto.email }
+    })
 
-    try {
-      const usuarioExistente = await usuarios.findFirst({ where: { email } })
+    if (!usuarioExistente) {
 
-      if (!usuarioExistente) {
-        let cargo = FormataCargo(tipoCargo) //TESTANDO FUNÇÃO DINAMICA PARA VALIDAR FUNÇÃO DO USUÁRIO
+      let cargo = FormataCargo(createUsuarioDto.tipoCargo) //TESTANDO FUNÇÃO DINAMICA PARA VALIDAR FUNÇÃO DO USUÁRIO
 
-        const cadastrar = await usuarios.create({
-          data: { nome, sobrenome, email, senha, cargoId: Number(cargo) }
-        })
+      const novoUsuario = this.prisma.usuarios.create({
+        data: {
+          nome: createUsuarioDto.nome,
+          sobrenome: createUsuarioDto.sobrenome,
+          email: createUsuarioDto.email,
+          senha: createUsuarioDto.senha,
+          cargoId: Number(cargo)
+        }
+      })
 
-        return `Usuário(a) ${cadastrar.nome.toUpperCase()} ${cadastrar.sobrenome.toUpperCase()} foi cadastrado com sucesso.`
-      }
-    } catch (error) {
-      return "Erro interno. Tivemos um erro ao tentar cadastar um novo usuário no sistema. Por favor, tente novamente."
+      return "Novo usuário cadastrado com sucesso."
     }
+    throw new HttpException("O email informado já esta vinculado a outro usuário no sistema.", HttpStatus.BAD_REQUEST)
   }
 
   async ListarUsuarios() {
@@ -101,17 +111,17 @@ export class UsuariosService {
         const usuarioEditado = await usuarios.update({
           where: { id },
           data: {
-            nome: nome === "" ? usuarioID.nome : nome, 
-            sobrenome: sobrenome === "" ? usuarioID.sobrenome : sobrenome, 
-            email: email === "" ? usuarioID.email : email, 
-            senha: senha.trim() === "" ? usuarioID.senha : senha, 
+            nome: nome === "" ? usuarioID.nome : nome,
+            sobrenome: sobrenome === "" ? usuarioID.sobrenome : sobrenome,
+            email: email === "" ? usuarioID.email : email,
+            senha: senha.trim() === "" ? usuarioID.senha : senha,
             cargoId: !cargo ? usuarioID.cargoId : Number(cargo)
           }
         })
 
         return {
           status: "A edição foi concluída com sucesso.",
-          dados_antigos: usuarioID, 
+          dados_antigos: usuarioID,
           dados_atualizados: usuarioEditado
         }
       }
@@ -124,10 +134,10 @@ export class UsuariosService {
 
   async ExcluirUsuario(id: string) {
     try {
-      const idUsuario = await usuarios.findFirst({ where: { id }})
-      
-      if(idUsuario) {
-        await usuarios.delete({ where: {id}})
+      const idUsuario = await usuarios.findFirst({ where: { id } })
+
+      if (idUsuario) {
+        await usuarios.delete({ where: { id } })
         return `Os dados do usuário ${idUsuario.nome} ${idUsuario.sobrenome} foram excluídos com sucesso.`
       }
     } catch (error) {
