@@ -15,7 +15,7 @@ export class UsuariosService {
   constructor(private prisma: PrismaService) { }
 
   async CadastrarUsuario(createUsuarioDto: CreateUsuarioDto) {
-    
+
     const usuarioExistente = await this.prisma.usuarios.findFirst({
       where: { email: createUsuarioDto.email }
     })
@@ -40,27 +40,44 @@ export class UsuariosService {
   }
 
   async ListarUsuarios() {
-    try {
-      const usuariosCadastrados = await usuarios.findMany({
-        select: {
-          id: true,
-          nome: true,
-          sobrenome: true,
-          email: true,
-          cargo: { select: { id: true, cargo: true } },
-          dt_criacao: true
-        }
-      })
+    // try {
+    //   const usuariosCadastrados = await usuarios.findMany({
+    //     select: {
+    //       id: true,
+    //       nome: true,
+    //       sobrenome: true,
+    //       email: true,
+    //       cargo: { select: { id: true, cargo: true } },
+    //       dt_criacao: true
+    //     }
+    //   })
 
-      if (!usuariosCadastrados) {
-        return "Não existe nenhum usuário cadastrado no sistema."
+    //   if (!usuariosCadastrados) {
+    //     return "Não existe nenhum usuário cadastrado no sistema."
+    //   }
+
+    //   return usuariosCadastrados
+
+    // } catch (error) {
+    //   return "Erro interno. Tivemos um erro ao tentar buscar as informações dos usuários no sistema. Por favor, tente novamente."
+    // }
+
+    const usuariosCadastrados = await this.prisma.usuarios.findMany({
+      select: {
+        id: true,
+        nome: true,
+        sobrenome: true,
+        email: true,
+        cargo: { select: { id: true, cargo: true } },
+        dt_criacao: true
       }
+    })
 
-      return usuariosCadastrados
-
-    } catch (error) {
-      return "Erro interno. Tivemos um erro ao tentar buscar as informações dos usuários no sistema. Por favor, tente novamente."
+    if (!usuariosCadastrados) {
+      throw new HttpException("Nâo existe nenhum usuário cadastrado no sistema.", HttpStatus.NOT_FOUND)
     }
+
+    return usuariosCadastrados
   }
 
   async UsuarioNome(nome: string) {
