@@ -81,38 +81,66 @@ export class UsuariosService {
   }
 
   async UsuarioNome(nome: string) {
-    try {
-      const nomeUsuario = await usuarios.findFirst({
-        where: { nome: { equals: nome, mode: "insensitive" } },
-        select: {
-          id: true,
-          nome: true,
-          sobrenome: true,
-          email: true,
-          cargo: { select: { id: true, cargo: true } },
-          dt_criacao: true
-        }
-      })
+    // try {
+    //   const nomeUsuario = await usuarios.findFirst({
+    //     where: { nome: { equals: nome, mode: "insensitive" } },
+    //     select: {
+    //       id: true,
+    //       nome: true,
+    //       sobrenome: true,
+    //       email: true,
+    //       cargo: { select: { id: true, cargo: true } },
+    //       dt_criacao: true
+    //     }
+    //   })
 
-      if (nomeUsuario) {
-        let dataFormatada = formatarDataISO(nomeUsuario.dt_criacao)
+    //   if (nomeUsuario) {
+    //     let dataFormatada = formatarDataISO(nomeUsuario.dt_criacao)
 
-        let infor = {
-          id: nomeUsuario.id,
-          nome: nomeUsuario.nome,
-          sobrenome: nomeUsuario.sobrenome,
-          email: nomeUsuario.email,
-          cargo: nomeUsuario.cargo.cargo,
-          cadastro: dataFormatada
-        }
+    //     let infor = {
+    //       id: nomeUsuario.id,
+    //       nome: nomeUsuario.nome,
+    //       sobrenome: nomeUsuario.sobrenome,
+    //       email: nomeUsuario.email,
+    //       cargo: nomeUsuario.cargo.cargo,
+    //       cadastro: dataFormatada
+    //     }
 
-        return infor
+    //     return infor
+    //   }
+
+    //   return `Não existe usuário cadastrado com o nome: ${nome}.`
+    // } catch (error) {
+    //   return `Erro interno. Tivemos um erro ao tentar buscar as informações do usuário ${nome} no sistema. Por favor, tente novamente.`
+    // }
+    const nomeUsuario = await this.prisma.usuarios.findFirst({
+      where: { nome: { equals: nome, mode: "insensitive" } },
+      select: {
+        id: true,
+        nome: true,
+        sobrenome: true,
+        email: true,
+        cargo: { select: { id: true, cargo: true } },
+        dt_criacao: true
+      }
+    })
+
+    if (nomeUsuario) {
+      let dataFormatada = formatarDataISO(nomeUsuario.dt_criacao)
+
+      let infor = {
+        id: nomeUsuario.id,
+        nome: nomeUsuario.nome,
+        sobrenome: nomeUsuario.sobrenome,
+        email: nomeUsuario.email,
+        cargo: nomeUsuario.cargo.cargo,
+        cadastro: dataFormatada
       }
 
-      return `Não existe usuário cadastrado com o nome: ${nome}.`
-    } catch (error) {
-      return `Erro interno. Tivemos um erro ao tentar buscar as informações do usuário ${nome} no sistema. Por favor, tente novamente.`
+      return infor
     }
+
+    throw new HttpException("Nâo existe nenhum usuário cadastrado no sistema com o nome informado.", HttpStatus.NOT_FOUND)
   }
 
   async EditarUsuario(id: string, updateUsuarioDto: UpdateUsuarioDto) {
