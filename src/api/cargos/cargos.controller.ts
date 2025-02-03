@@ -32,7 +32,7 @@ export class CargosController {
     return this.cargosService.AtualizarCargo(+id, updateCargoDto);
   }
 
-  @Patch(':id')
+  @Delete(':id')
   Apagar(@Param('id') id: string) {
     return this.cargosService.ApagarCargo(+id);
   }
