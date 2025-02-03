@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { prismaConfig } from 'src/config/prismaConfig';
@@ -15,31 +15,14 @@ export class UsuariosService {
   constructor(private prisma: PrismaService) { }
 
   async CadastrarUsuario(createUsuarioDto: CreateUsuarioDto) {
-    const { nome, sobrenome, email, senha, tipoCargo } = createUsuarioDto
-
-    // try {
-    //   const usuarioExistente = await usuarios.findFirst({ where: { email } })
-
-    //   if (!usuarioExistente) {
-    //     let cargo = FormataCargo(tipoCargo) //TESTANDO FUNÇÃO DINAMICA PARA VALIDAR FUNÇÃO DO USUÁRIO
-
-    //     const cadastrar = await usuarios.create({
-    //       data: { nome, sobrenome, email, senha, cargoId: Number(cargo) }
-    //     })
-
-    //     return `Usuário(a) ${cadastrar.nome.toUpperCase()} ${cadastrar.sobrenome.toUpperCase()} foi cadastrado com sucesso.`
-    //   }
-    // } catch (error) {
-    //   return "Erro interno. Tivemos um erro ao tentar cadastar um novo usuário no sistema. Por favor, tente novamente."
-    // }
-
-    const usuarioExistente = this.prisma.usuarios.findFirst({
-      where: { email }
+    
+    const usuarioExistente = await this.prisma.usuarios.findFirst({
+      where: { email: createUsuarioDto.email }
     })
 
-    if(!usuarioExistente) {
+    if (!usuarioExistente) {
 
-      let cargo = FormataCargo(tipoCargo) //TESTANDO FUNÇÃO DINAMICA PARA VALIDAR FUNÇÃO DO USUÁRIO
+      let cargo = FormataCargo(createUsuarioDto.tipoCargo) //TESTANDO FUNÇÃO DINAMICA PARA VALIDAR FUNÇÃO DO USUÁRIO
 
       const novoUsuario = this.prisma.usuarios.create({
         data: {
@@ -53,6 +36,7 @@ export class UsuariosService {
 
       return "Novo usuário cadastrado com sucesso."
     }
+    throw new HttpException("O email informado já esta vinculado a outro usuário no sistema.", HttpStatus.BAD_REQUEST)
   }
 
   async ListarUsuarios() {
